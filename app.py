@@ -20,14 +20,26 @@ REPLIKA_PASSWORD = os.getenv('REPLIKA_PASSWORD')
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp_reply():
     incoming_msg = request.values.get('Body', '').lower()
+    sender = request.values.get('From')  # Get the sender's number
 
     # Call the function to get Replika's response
     bot_response = get_replika_response(incoming_msg)
 
-    # Send response back to WhatsApp
+    # Create a response object
     resp = MessagingResponse()
     msg = resp.message()
     msg.body(bot_response)
+
+    # Send response back to Twilio
+    try:
+        message = client.messages.create(
+            to=sender,  # Respond to the sender
+            from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+            body=bot_response
+        )
+    except Exception as e:
+        print(f"Error sending message: {e}")
+
     return str(resp)
 
 def get_replika_response(user_message):
