@@ -30,4 +30,4 @@ jobs:
           REPLIKA_EMAIL: ${{ secrets.REPLIKA_EMAIL }}
           REPLIKA_PASSWORD: ${{ secrets.REPLIKA_PASSWORD }}
         run: |
-          python app.py  # Start your Flask app
+          python app.py & docker run -it -e NGROK_AUTHTOKEN=2IfWZ6EdjqQojALawNDc7DRjmD9_6kWdcpDLX3MfYRLVehnik ngrok/ngrok http 80 --domain=wanted-tolerant-toucan.ngrok-free.app  # Start your Flask app
