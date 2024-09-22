@@ -23,11 +23,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Flask app
-        env:
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          REPLIKA_EMAIL: ${{ secrets.REPLIKA_EMAIL }}
-          REPLIKA_PASSWORD: ${{ secrets.REPLIKA_PASSWORD }}
+      - name: Start Flask app
+        run: python app.py &
+
+      - name: Start ngrok
         run: |
-          python app.py & docker run -it -e NGROK_AUTHTOKEN=2IfWZ6EdjqQojALawNDc7DRjmD9_6kWdcpDLX3MfYRLVehnik ngrok/ngrok http 80 --domain=wanted-tolerant-toucan.ngrok-free.app  # Start your Flask app
+          docker run -d -e NGROK_AUTHTOKEN=${{ secrets.NGROK_AUTHTOKEN }} ngrok/ngrok http 5000 --domain=wanted-tolerant-toucan.ngrok-free.app
