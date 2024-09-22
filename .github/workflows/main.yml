@@ -28,6 +28,5 @@ jobs:
 
       - name: Run tests
         run: |
-          source venv/bin/activate
-          pip install -r requirements.txt
-          flask run
+          # Uncomment the next line if you have tests
+          # pytest tests/
