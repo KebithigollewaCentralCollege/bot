@@ -27,7 +27,7 @@ def whatsapp_reply():
     msg.body(bot_response)
     return str(resp)
 
-message=client.message.create(to='whatsapp:+94743481092',
+message=client.messages.create(to='whatsapp:+94743481092',
                               from_='whatsapp:+14155238886',
                                 body='Test')
 
