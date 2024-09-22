@@ -27,7 +27,7 @@ def whatsapp_reply():
 
 message=client.message.create(to='whatsapp:+94743481092',
                               from='whatsapp:+14155238886',
-                                body='Test")
+                                body='Test')
 
 def get_replika_response(user_message):
     # Set up Selenium for headless browser automation
