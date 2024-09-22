@@ -26,7 +26,7 @@ def whatsapp_reply():
     return str(resp)
 
 message=client.message.create(to='whatsapp:+94743481092',
-                              from='whatsapp:+14155238886',
+                              from_='whatsapp:+14155238886',
                                 body='Test')
 
 def get_replika_response(user_message):
