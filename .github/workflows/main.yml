@@ -27,6 +27,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: |
+        run: 
+          python app.py
+
           # Uncomment the next line if you have tests
           # pytest tests/
