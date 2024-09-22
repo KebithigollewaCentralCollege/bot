@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 sid='TWILIO_ACCOUNT_SID'
 authToken='TWILIO_AUTH_TOKEN'
+client=Client(sid,authToken)
 
 app = Flask(__name__)
 
