@@ -4,15 +4,18 @@ from twilio.rest import Client
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-sid='TWILIO_ACCOUNT_SID'
-authToken='TWILIO_AUTH_TOKEN'
-client=Client(sid,authToken)
+import os
+
+# Initialize Twilio client with environment variables
+sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+client = Client(sid, auth_token)
 
 app = Flask(__name__)
 
 # Replace these with your Replika login credentials
-REPLIKA_EMAIL = "nicojs000@gmail.com"
-REPLIKA_PASSWORD = "Pradeep99."
+REPLIKA_EMAIL = os.getenv('REPLIKA_EMAIL')
+REPLIKA_PASSWORD = os.getenv('REPLIKA_PASSWORD')
 
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp_reply():
@@ -27,42 +30,41 @@ def whatsapp_reply():
     msg.body(bot_response)
     return str(resp)
 
-message=client.messages.create(to='whatsapp:+94743481092',
-                              from_='whatsapp:+14155238886',
-                                body='Test')
-
 def get_replika_response(user_message):
     # Set up Selenium for headless browser automation
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    options.add_argument('--headless')  # Run in headless mode
     driver = webdriver.Chrome(options=options)
 
-    # Navigate to Replika login page
-    driver.get("https://my.replika.com/login")
-    time.sleep(3)
+    try:
+        # Navigate to Replika login page
+        driver.get("https://my.replika.com/login")
+        time.sleep(3)
 
-    # Automate login process
-    username_field = driver.find_element_by_name("email")
-    password_field = driver.find_element_by_name("password")
+        # Automate login process
+        username_field = driver.find_element("name", "email")
+        password_field = driver.find_element("name", "password")
 
-    username_field.send_keys(REPLIKA_EMAIL)
-    password_field.send_keys(REPLIKA_PASSWORD)
-    password_field.send_keys(Keys.RETURN)
-    
-    time.sleep(5)  # Wait for the chat interface to load
+        username_field.send_keys(REPLIKA_EMAIL)
+        password_field.send_keys(REPLIKA_PASSWORD)
+        password_field.send_keys(Keys.RETURN)
+        
+        time.sleep(5)  # Wait for the chat interface to load
 
-    # Send the user's message to Replika's chatbox
-    chatbox = driver.find_element_by_css_selector("textarea")
-    chatbox.send_keys(user_message)
-    chatbox.send_keys(Keys.RETURN)
+        # Send the user's message to Replika's chatbox
+        chatbox = driver.find_element("css selector", "textarea")
+        chatbox.send_keys(user_message)
+        chatbox.send_keys(Keys.RETURN)
 
-    time.sleep(5)  # Wait for Replika to respond
+        time.sleep(5)  # Wait for Replika to respond
 
-    # Get Replika's response
-    messages = driver.find_elements_by_css_selector(".message-text")
-    replika_response = messages[-1].text  # Get the last message (Replika's response)
+        # Get Replika's response
+        messages = driver.find_elements("css selector", ".message-text")
+        replika_response = messages[-1].text  # Get the last message (Replika's response)
 
-    driver.quit()  # Close the browser session
+    finally:
+        driver.quit()  # Close the browser session
+
     return replika_response
 
 if __name__ == '__main__':
