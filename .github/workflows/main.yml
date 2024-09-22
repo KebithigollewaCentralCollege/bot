@@ -24,10 +24,5 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Flask app
-       env:
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          REPLIKA_EMAIL: ${{ secrets.REPLIKA_EMAIL }}
-          REPLIKA_PASSWORD: ${{ secrets.REPLIKA_PASSWORD }}
         run: |
           python app.py  # Run your Flask app
