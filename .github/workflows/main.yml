@@ -1,34 +1,28 @@
-name: CI for Flask App
+name: Deploy Flask App
 
 on:
   push:
     branches:
-      - main  # Change to your main branch if different
-  pull_request:
-    branches:
-      - main  # Runs on pull requests to the main branch
+      - main  # Adjust as needed
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.9'  # Specify your Python version
+          python-version: '3.x'  # Specify your Python version
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests
-        run: 
-          python app.py
-
-          # Uncomment the next line if you have tests
-          # pytest tests/
+      - name: Run Flask app
+        run: |
+          nohup python server.py & app.py
